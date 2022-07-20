@@ -2,6 +2,27 @@ import streamlit as st
 from streamlit_folium import st_folium
 import folium
 import requests
+import base64
+
+def add_bg_from_local(image_file: str) -> None:
+    """ Add background image to streamlit app.
+
+    Args:
+        image_file (str): path to the image file.
+    """
+    with open(image_file, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
+        background-size: cover
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
 
 def title() -> None:
     """ Add title to streamlit page.
@@ -51,6 +72,7 @@ def user_input() -> None:
 def app() -> None:
     """ Call the components of the streamlit app.
     """
+    add_bg_from_local("background.jpg")
     title()
     user_input()
 
